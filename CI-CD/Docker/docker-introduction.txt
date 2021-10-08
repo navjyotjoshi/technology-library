@@ -12,14 +12,14 @@ Docker - Platform or ecosystem for creating and running containers
 Container - An instance of an image, runs a program
 Image - Single file (including codebase/build) with all required configs and dependencies
 
-Docker contains Unix/Linux virtual machine built-in, on which all containers run.
-
 Docker client - receives commands from user/developer
 Docker server (virtual) - receives commands from docker client and runs image from image cache
 Image cache - storage area where all images are stored
-
 Docker Hub - Public Image storage (like github public repositories) from where an image can be imported
 
 
+Docker contains Unix/Linux virtual machine built-in, on which all containers run.
+process running on machine (like chrome/java/node.js/etc) --> system call --> Kernel --> CPU/Memory/HardDisk/etc
 
-
+Container (each) contains dedicated installation of runtime environment (Java_8/Python_2/Node.js/etc) along with dedicated CPU/Memory assigned to it
+No resource sharing between containers
