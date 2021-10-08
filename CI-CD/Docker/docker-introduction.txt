@@ -22,4 +22,4 @@ Docker contains Unix/Linux virtual machine built-in, on which all containers run
 process running on machine (like chrome/java/node.js/etc) --> system call --> Kernel --> CPU/Memory/HardDisk/etc
 
 Container (each) contains dedicated installation of runtime environment (Java_8/Python_2/Node.js/etc) along with dedicated CPU/Memory assigned to it
-No resource sharing between containers
+No resource sharing between containers -> 1. Namespacing (insolating resources per process/group of processes), 2. Control Groups (Limit amount of resources used per process)
