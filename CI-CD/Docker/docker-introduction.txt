@@ -1,0 +1,6 @@
+Docker - Platform or ecosystem for creating and running containers
+Container - An instance of an image, runs a program
+Image - Single file (including codebase/build) with all required configs and dependencies
+
+Docker contains Unix/Linux virtual machine built-in, on which all containers run.
+
