@@ -1,0 +1,18 @@
+AWS Regions - All around the world (Names: us-east-1,eu-west-3,etc)
+Region - A cluster of data centers (Most AWS services are region-scoped)
+
+How to choose AWS region?
+	- Compliance (data governance and legal requirments) - Data never leaves region without your external permission
+	- Proximity to customer - reduced latency
+	- Available services within a region - new services/features are not available in all regions, they are rolled out in phases
+	- Pricing - pricing varies from region to region (service pricing page contains transparent pricing)
+	
+	
+
+Availability Zone (AZ) - One of more discrete data centers with redundant power, networking and connectivity
+
+Each region has many (min:2, max:6, avg/usually:3) Availability Zones
+AZs are separated form each other, so that they are isolated from disasters
+AZs are connected with high bandwidth ultra-low latency networking
+	
+	
