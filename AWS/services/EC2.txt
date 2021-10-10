@@ -1,0 +1,96 @@
+EC2 - Elastic Compute Cloud	- Infrastructure as a Service (IaaS)
+
+EC2 serves multiple features of AWS
+EC2 knowledge - fundamental to understand how cloud works
+
+EC2 configuration:
+	- OS (Windows/Linux/MacOS)
+	- compute power and cores (CPU)
+	- RAM
+	- storage
+		# ntework attached (EBS & EFS)
+		# hardware (EC2 instance store)
+	- netwrok card
+	- filrewall rules - security group
+	- bootstrap script (configure at first launch) : EC2 User Data {bootstrapping : launching commands when a machine starts}
+		-> EC2 user data is used to automate boot tasks like installing software, installing updates, or anything you can think of
+		-> EC2 user data script runs with a root user
+		-> EC2 user data script runs during very and only first boot of the instance
+
+EC2 instance types: https://aws.amazon.com/ec2/instance-types/
+	- defines specifications/configurations for EC2 such as RAM/CPU/etc
+	- m5.2xlarge (m-instance class, 5-generation{AWS improces them over time}, 2xlarge-size within the instance class)
+
+
+EC2
+	- create new instance
+	- AMI : Amazon Machine Image (e.g. OS)
+		-> Amazon provided AMIs are available
+		-> custom AMI can be built
+	- choose Instance Type
+	- instance details - No.of Instances, VPC (Virtual private cloud) {keep default}, IAM roles (can/will be modified later), user data script
+	- Add storage (upto 30 GB EBS general purpose storage for free tier) {delete on termination - ON}
+	- Tag {Name - <displayName>, }
+	- Security Group
+		-> create New security group 
+		-> Add rule: HTTP/80 (TCP protocol) {source: default => ALL ALLOWED i.e. 0.0.0.0/0, ::/0}
+	- Launch
+		-> key pair (existing/new) {for SSH connection}
+		-> create new key pair {key-pair name} -> download key pair (.pem file) and save it safe [CAN BE DOWNLOADED ONLY ONCE]
+		-> Load this .pem file as private key in puttygen (key generator), and save generated private key as .ppk (putty private key) file which will be used for SSH connection using putty
+		-> Default user (SSH) : ec2-user
+		
+	- Start/Stop/Terminate{delete non-recoverable}
+		-> public IP changes on every restart {private IP constant}
+	
+	- EC2 instance has AWS CLI installed by default
+		-> NEVER put access and secret key in CLI (could be visible to all users having access to that instance)
+		-> Always assign custom defined IAM Roles to EC2 instance in order to "grant access on AWS resources through EC2 instance"
+		-> Security --> IAM Roles
+	
+	- EC2 Instance launch types:
+		-> On demand : short workload, predictable pricing
+		-> Reserved : minimum 1 year reserved - discounted pricing
+			$ Reserved Instances: long workloads, 
+			$ Convertible Reserved Instances: long workloads with flexible instances
+			$ Scheduled Reserved Instances: scheduled e.g. every Sunday 3 AM to 6AM, etc
+		-> Spot Instances - cheap, can lose instances with price fluctuation, less reliable
+		-> Dedicated Host - book entire physical server, expensive, useful in case of compliance/regulatory/legal requirements
+
+
+-------------------------------- Security Groups ------------------------------------------------
+Security Groups: Fundamental of network security in AWS
+
+	- Controls how network traffic is allowed into (inbound) or out of (outbound) EC2 instances
+	- Only contains ALLOW rules
+	- Can reference by IP or by security group
+	- Acts like firewall for EC2
+	- Regulates:
+		$ Access to ports
+		$ Authorized IP ranges - IPv4 and IPv6
+		$ Controls inbound netwrok (default : all traffic blocked)
+		$ Controls outbound netwrok (default : all traffic authorized)
+	
+	- Can be attached to multiple instances (one instance also can have multiple security groups)
+	- Security group is locked down to Region /VPC combination (new security group to be created for new region)
+	- Maintained outside EC2 (i.e. blocked traffic doesn't even reach EC2)
+	- Application not accessible (time out) - it has to be a security group issue {general rule for AWS EC2}
+		{if connection refused error, then app error - security group has passed traffic}
+	- Two/more EC2 instances having same security group/s (rules) can communicate to each other, while traffic is blocked in group/rule is not matched
+
+Standard Ports:
+	$ 22 : SSH (secure shell) - login to linux instance [Also used for SFTP {secured file transfer protocol} for uploading files using SSH]
+	$ 21 : FTP (File transfer protocol) - upload files into file share
+	$ 80 : HTTP - access unsecured websites
+	$ 443 : HTTPS - access secured websites
+	$ 3389 : RDP - remote desktop protocol - log into a windows instance
+
+------------------------------------------------------------------------------------------------
+
+
+-------------------------------- EC2 Instant Connect ------------------------------------------------
+Direct connection to EC2 instance through browser (uses SSH in background)
+	- Connect --> Instant Connect --> username: ec2-user --> connect
+	- It uses security group, so ssh rule must be there in security group otherwise timeout			
+	
+------------------------------------------------------------------------------------------------

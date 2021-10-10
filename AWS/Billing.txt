@@ -1,0 +1,8 @@
+
+- Account Name --> My Billing Dashboard
+
+- Budget
+	- Create Budget
+	- Cost Budget (recommended type of budget)
+	- monthly $10 (example)
+	- Set Thresholds -> when actual and forecasted bill reaches to threshold limit set, auto-email will be sent
