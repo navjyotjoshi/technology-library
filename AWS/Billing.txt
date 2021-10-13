@@ -1,6 +1,8 @@
 
 - Account Name --> My Billing Dashboard
 
+- Account Name --> My Account -> Enable Billing Access to IAM users (& respective user must have policy/permission assigned to it)
+
 - Budget
 	- Create Budget
 	- Cost Budget (recommended type of budget)

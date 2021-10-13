@@ -29,13 +29,13 @@ EC2
 		-> custom AMI can be built
 	- choose Instance Type
 	- instance details - No.of Instances, VPC (Virtual private cloud) {keep default}, IAM roles (can/will be modified later), user data script
-	- Add storage (upto 30 GB EBS general purpose storage for free tier) {delete on termination - ON}
+	- Add storage (upto 30 GB EBS general purpose storage for free tier) {delete on termination option available - default ON for root volume, OFF for other volumes}
 	- Tag {Name - <displayName>, }
 	- Security Group
-		-> create New security group 
+		-> create New security group (or existing one)
 		-> Add rule: HTTP/80 (TCP protocol) {source: default => ALL ALLOWED i.e. 0.0.0.0/0, ::/0}
 	- Launch
-		-> key pair (existing/new) {for SSH connection}
+		-> key pair (existing/new) {for SSH connection} (one key-pair can be used for multiple EC2 instances)
 		-> create new key pair {key-pair name} -> download key pair (.pem file) and save it safe [CAN BE DOWNLOADED ONLY ONCE]
 		-> Load this .pem file as private key in puttygen (key generator), and save generated private key as .ppk (putty private key) file which will be used for SSH connection using putty
 		-> Default user (SSH) : ec2-user
@@ -92,5 +92,88 @@ Standard Ports:
 Direct connection to EC2 instance through browser (uses SSH in background)
 	- Connect --> Instant Connect --> username: ec2-user --> connect
 	- It uses security group, so ssh rule must be there in security group otherwise timeout			
+	
+------------------------------------------------------------------------------------------------
+
+
+-------------------------------- EBS - Elastic Block Store ------------------------------------------------
+EBS Volume - Network drive (not physical drive) attached to EC2 isnatnce		
+	- Data transfer between instance and drive happens thruogh network (expected bit of latency)
+	- Can persist even after termination of instance
+	- Bound to specific availability zone (has to be attced to instance of same AZ)
+	- Cannot be attached to multiple instances at a time (one instance can have multiple storage drives)
+	- Can be quickly detached from one instance and attached to another
+	- provisioned capacity (size in GBs and IOPS - IO per second) , can be increased over time
+
+EBS Snapshots (backup)
+	- Location: EC2 -> EBS-> Snanshots
+	- backup/snapshot can be taken anytime (volume --> actions --> create snapshot)
+	- no need to detach volume from instance
+	- snapshot is crated in same AZ/region
+	- Copy snapshot - creates another snapshot/copy (any AZ/region) --> {Action --> Copy}
+	- Create volume (from snapshot) - can be created in another AZ/region - this way you can copy your volumne to other AZ/region {volume -> snapshot -> volume}
+
+EBS Volume Types ( characterized in Size | Throughput | IOPS ):
+
+	- general purpose SSD volume : gp2/gp3 - balances price and performance for wide variety of workloads	
+		$ cost effective, low latency
+		$ system boot volumes, virtual machines, dev and test envs
+		$ between 1 GB to 16 TB
+	
+		gp2:
+			# upto 3000 IOPS
+			# size of volume and IOPS are linked, max IOPS is 16k
+			# 3 IOPS per GB, means at 5,334 GB we are at max IOPS
+		
+		gp3:
+			# baseline 3000 IOPS, throughput 125 MB/sec (size/IOPS not linked)
+			# can increase upto 16k IOPS and 1000 MB/s throughput
+		
+	- Provisioned IOPS SDD : io1/io2 - highest performance, mission critical, low latency, high throughput workloads
+		$ 
+		
+	- stl (HDD): low cost HDD, designed for frequently accessed, throughput intensive workloads
+		$ cannot be used as boot volumes for EC2 instance
+		
+	- scl (HDD): lowest cost, less frequently accessed workloads
+		$ cannot be used as boot volumes for EC2 instance
+
+		
+EBS multi attach (only for io1/io2 family):
+	- attach same EBS volume (multi attached enabled volume) to multiple EC2 instances of same AZ
+	- each instance has full read/write access to volume
+	- use case: 
+		* achieve higher application availability in clustered linux apps
+		* apps must manage concurrent write operations
+	- must use a file system that is cluster aware
+	
+EC2 Instance store
+	- They are used instaed of EBS as high performance hardware disk
+	- Better I/O performance
+	- They lose their storage if they're stopped (ephemeral)
+	- cannot be used durable long term storae
+	- Good for buffers/cache/scratch data/temporary content
+	- risk of data loss on hardware failure
+	- backup and replication is user/deveoper's responsibility
+	
+------------------------------------------------------------------------------------------------
+
+-------------------------------- AMI - Amazon Machine Image ------------------------------------------------
+AMI - customization of EC2 isnatcne
+	- Add your own software, configuration, OS, monitoring, etc
+	- Faster boot / config time i.e. all softwares are pre-packaged within AMI
+	- AMI is region specific (can be copied acorss regions)
+	- EC2 instance can be launched using:
+		$ Public AMI : AWS provided
+		$ Your own AMI : Make and maintain yourself (tools available to automate it but cloud user has to do this)
+		$ AWS Marketplace AMI : AMI that someone else has made (and potentially sells it - few peope do this as a business too)
+
+Create AMI from existing EC2 instance
+	- Instance Name (right click) -> Images and Templates -> create image (Tgis also creates EBS snapshots)
+	- Images -> AMIs -- to view created AMI
+	- This can be used while creating new EC2 instance (will be avilable under My Images while choosing AMI while creating new instance)
+	- To backup VM, config, softwares, firewalls etc, images are useful and used as backup of VM
+	- AMIs can be used for creating instance from another instance in different AZ/region (same way as snapshots works for EBS)
+	
 	
 ------------------------------------------------------------------------------------------------
