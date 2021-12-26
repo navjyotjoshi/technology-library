@@ -1,0 +1,26 @@
+
+
+Prerequisites:	
+	- install JAVA
+	- vi /etc/yum.repos.d/epel-yum-ol7.repo --> enabled=1 (enable epel)
+
+	
+$ sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+$ sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+$ sudo yum -y install jenkins
+
+Default port: 8080
+
+
+Add jenkins to allow traffic from firewall
+$ sudo firewall-cmd --permanent --zone=public --add-service=jenkins
+$ sudo firewall-cmd --reload
+
+
+Acces URL: http://129.154.224.171:8080/		(http://public_ip_of_unix_VM:port)
+
+Default admin password (unlock jenkins for first time):
+$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+369f06fa594445478fa2060376f87ba7
+
+Click on --> Install suggested plugins
