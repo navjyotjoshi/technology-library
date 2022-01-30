@@ -10,6 +10,7 @@ $ sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
 $ sudo yum -y install jenkins
 
 Default port: 8080
+cat /etc/sysconfig/jenkins ==> JENKINS_PORT		(This is path for centos/oracle linux, unbuntu -> /etc/default/jenkins)
 
 
 Add jenkins to allow traffic from firewall
@@ -19,8 +20,10 @@ $ sudo firewall-cmd --reload
 
 Acces URL: http://129.154.224.171:8080/		(http://public_ip_of_unix_VM:port)
 
+Click on --> Install suggested plugins
+
 Default admin password (unlock jenkins for first time):
 $ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 369f06fa594445478fa2060376f87ba7
 
-Click on --> Install suggested plugins
+Setup new admin user (optional) or admin user (username - admin) with above password
